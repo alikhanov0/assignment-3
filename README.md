@@ -31,6 +31,8 @@ Relationships:
 
 Each entity is implemented as a Java class in `src/models`.
 
+![App Screenshot](/lib/Снимок%20экрана%202026-01-27%20083828.png)
+
 ---
 
 ## Abstraction & Layered archiyecture
