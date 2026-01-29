@@ -1,8 +1,6 @@
 import models.Dorm;
-import models.Room;
 import models.Student;
 import service.DormService;
-import service.RoomService;
 import service.StudentService;
 
 import java.sql.Date;
@@ -12,7 +10,6 @@ public class App {
 
         StudentService service = new StudentService();
         DormService dormService = new DormService();
-        RoomService roomService = new RoomService();
 
         Dorm d1 = new Dorm(3, "Dorm A", "Abay street 10", 300);
         // dormService.addDorm(d1);
@@ -28,26 +25,30 @@ public class App {
 
         // service.addStudent(s1);
 
-        Room r = new Room(6, 2, "201", 1, "Double");
         // roomService.addRoom(r);
 
-        System.out.println("Dorms:");
-        for (Dorm d : dormService.getAll()) {
-            System.out.println(d.getDormId() + " " + d.getDormName());
-        }
-
+        /*
+         * System.out.println("Dorms:");
+         * for (Dorm d : dormService.getAll()) {
+         * System.out.println(d.getDormId() + " " + d.getDormName());
+         * }
+         * 
+         */
         System.out.println("All students:");
         for (Student s : service.getAll()) {
             System.out.println(
                     s.getStudentId() + " " +
                             s.getFirstName() + " " +
                             s.getLastName() + " " +
-                            s.getEmail());
+                            s.getEmail() + " " + s.getEnrollmentDate());
         }
 
-        System.out.println("Rooms:");
-        for (Room x : roomService.getAll()) {
-            System.out.println(x.getRoomId() + " Dorm=" + x.getDormId() + " " + x.getRoomNumber());
-        }
+        /*
+         * System.out.println("Rooms:");
+         * for (Room x : roomService.getAll()) {
+         * System.out.println(x.getRoomId() + " Dorm=" + x.getDormId() + " " +
+         * x.getRoomNumber());
+         * }
+         */
     }
 }
