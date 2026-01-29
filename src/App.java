@@ -25,20 +25,10 @@ public class App {
         var roomController = new RoomController(roomService);
         var studentController = new StudentController(studentService);
 
-        RoomBase r1 = new OneBedRoom(0, 1, "201", 2);
-        roomController.create(r1);
-
-        Student s = new Student(
-                0,
-                "Aksungkar",
-                "Ganiyatov",
-                'M',
-                java.sql.Date.valueOf(LocalDate.now()),
-                "a@mail.com",
-                "87000000000");
-
-        studentController.create(s);
-
+        roomController.getAll().forEach(RoomBase::printInfo);
         studentController.getAll().forEach(Student::printSummary);
+        studentController.getById(1).setRoom(roomController.getById(1));
+        studentController.getAll().forEach(Student::printSummary);
+        // Check for errors
     }
 }
