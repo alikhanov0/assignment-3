@@ -11,6 +11,8 @@ public class Student {
     private String email;
     private String phone;
 
+    private RoomBase room;
+
     public Student(int studentId, String firstName, String lastName,
             char gender, Date enrollmentDate,
             String email, String phone) {
@@ -66,5 +68,23 @@ public class Student {
 
     public String getPhone() {
         return phone;
+    }
+
+    public RoomBase getRoom() {
+        return room;
+    }
+
+    public void setRoom(RoomBase room) {
+        this.room = room;
+    }
+
+    public void printSummary() {
+        System.out.print(studentId + " " + firstName + " " + lastName);
+        if (room != null) {
+            System.out.print(" -> ");
+            room.printInfo();
+        } else {
+            System.out.println(" -> no room assigned");
+        }
     }
 }
