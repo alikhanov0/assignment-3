@@ -1,34 +1,64 @@
 import controllers.RoomController;
 import controllers.StudentController;
-import models.*;
+import models.RoomBase;
+import models.Student;
 import repository.JdbcRoomRepository;
 import repository.JdbcStudentRepository;
+import repository.interfaces.RoomRepository;
+import repository.interfaces.StudentRepository;
 import service.RoomServiceImpl;
 import service.StudentServiceImpl;
+import service.interfaces.RoomService;
+import service.interfaces.StudentService;
 import utils.DatabaseConnection;
+import utils.ReflectionUtils;
+import utils.SortingUtils;
 
 import java.sql.Connection;
-import java.time.LocalDate;
+import java.util.List;
 
 public class App {
 
     public static void main(String[] args) {
 
-        Connection conn = DatabaseConnection.getConnection();
+        Connection connection = DatabaseConnection.getConnection();
 
-        var roomRepo = new JdbcRoomRepository(conn);
-        var studentRepo = new JdbcStudentRepository(conn);
+        RoomRepository roomRepository = new JdbcRoomRepository(connection);
+        StudentRepository studentRepository = new JdbcStudentRepository(connection);
 
-        var roomService = new RoomServiceImpl(roomRepo);
-        var studentService = new StudentServiceImpl(studentRepo);
+        RoomService roomService = new RoomServiceImpl(roomRepository);
+        StudentService studentService = new StudentServiceImpl(studentRepository, roomRepository);
 
-        var roomController = new RoomController(roomService);
-        var studentController = new StudentController(studentService);
+        RoomController roomController = new RoomController(roomService);
+        StudentController studentController = new StudentController(studentService);
 
-        roomController.getAll().forEach(RoomBase::printInfo);
+        System.out.println("All rooms:");
+        List<RoomBase> rooms = roomController.getAll();
+        rooms.forEach(RoomBase::printInfo);
+
+        System.out.println("\nAll students:");
+        List<Student> students = studentController.getAll();
+        students.forEach(Student::printSummary);
+
+        if (!students.isEmpty() && !rooms.isEmpty()) {
+            int studentId = students.get(0).getStudentId();
+            int roomId = rooms.get(0).getId();
+
+            studentController.assignRoom(studentId, roomId);
+        }
+
+        System.out.println("\nStudents after room assignment:");
         studentController.getAll().forEach(Student::printSummary);
-        studentController.getById(1).setRoom(roomController.getById(1));
-        studentController.getAll().forEach(Student::printSummary);
-        // Check for errors
+
+        System.out.println("\nRooms sorted by monthly fee (lambda):");
+        SortingUtils.sortRoomsByFee(rooms);
+        rooms.forEach(RoomBase::printInfo);
+
+        System.out.println("\nStudents sorted by last name (lambda):");
+        SortingUtils.sortStudentsByLastName(students);
+        students.forEach(Student::printSummary);
+
+        ReflectionUtils.printClassInfo(RoomBase.class);
+        ReflectionUtils.printClassInfo(Student.class);
     }
 }

@@ -32,4 +32,9 @@ public class StudentController {
     public void delete(int id) {
         service.delete(id);
     }
+
+    public void assignRoom(int studentId, int roomId) {
+        service.assignRoom(studentId, roomId);
+    }
+
 }
